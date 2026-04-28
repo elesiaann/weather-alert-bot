@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather Alert Bot</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">⛈️</span>
+        <span>Weather Alert Bot</span>
+      </div>
+      <button id="theme-toggle" title="Toggle theme" aria-label="Toggle dark/light mode">
+        <svg id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+        <svg id="icon-sun"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ── Setup Panel ─────────────────────────────────────────── -->
+    <section id="setup-section" class="card setup-card" aria-label="Bot configuration">
+      <div class="card-header">
+        <h2>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+          Configuration
+        </h2>
+        <button class="btn-collapse" id="config-toggle" aria-expanded="true" aria-controls="config-body">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
+        </button>
+      </div>
+
+      <div id="config-body" class="config-body">
+        <div class="config-grid">
+          <!-- Weather -->
+          <fieldset class="config-group">
+            <legend>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              OpenWeatherMap
+            </legend>
+            <label>
+              <span>API Key <a href="https://openweathermap.org/api" target="_blank" rel="noopener" class="help-link">get free key ↗</a></span>
+              <div class="secret-row">
+                <input type="password" id="owm-key" placeholder="e.g. 4a8b2c…" autocomplete="off" />
+                <button class="btn-eye" data-target="owm-key" aria-label="Show/hide">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </label>
+            <label>
+              <span>City / Location</span>
+              <div class="city-row">
+                <input type="text" id="city-input" placeholder="e.g. London, UK" autocomplete="off" />
+                <button class="btn-locate" id="btn-locate" title="Use my location" aria-label="Use GPS location">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+                </button>
+              </div>
+            </label>
+            <label>
+              <span>Units</span>
+              <select id="units">
+                <option value="metric">Metric (°C, m/s)</option>
+                <option value="imperial">Imperial (°F, mph)</option>
+              </select>
+            </label>
+          </fieldset>
+
+          <!-- Telegram -->
+          <fieldset class="config-group">
+            <legend>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-2.012 9.483c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L6.28 14.367l-2.95-.924c-.642-.2-.654-.642.136-.953l11.527-4.448c.535-.194 1.003.13.569.206z"/></svg>
+              Telegram Bot
+            </legend>
+            <label>
+              <span>Bot Token <a href="https://t.me/BotFather" target="_blank" rel="noopener" class="help-link">BotFather ↗</a></span>
+              <div class="secret-row">
+                <input type="password" id="tg-token" placeholder="123456:ABC-DEF…" autocomplete="off" />
+                <button class="btn-eye" data-target="tg-token" aria-label="Show/hide">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </label>
+            <label>
+              <span>Chat ID <a href="#" class="help-link" id="help-chatid">how to get it ↗</a></span>
+              <input type="text" id="tg-chat" placeholder="e.g. 123456789" autocomplete="off" />
+            </label>
+            <div id="chatid-help" class="help-box" style="display:none">
+              <strong>How to get your Chat ID:</strong><br>
+              1. Start your bot on Telegram<br>
+              2. Send it any message<br>
+              3. Open: <code>https://api.telegram.org/bot&lt;TOKEN&gt;/getUpdates</code><br>
+              4. Find <code>message.chat.id</code> in the JSON response
+            </div>
+          </fieldset>
+
+          <!-- Alert thresholds -->
+          <fieldset class="config-group">
+            <legend>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Alert Thresholds
+            </legend>
+            <label class="range-label">
+              <span>Rain probability ≥ <strong id="rain-val">50</strong>%</span>
+              <input type="range" id="rain-threshold" min="10" max="100" step="5" value="50" />
+            </label>
+            <label class="range-label">
+              <span>Wind speed ≥ <strong id="wind-val">50</strong> <span class="unit-label">km/h</span></span>
+              <input type="range" id="wind-threshold" min="20" max="150" step="5" value="50" />
+            </label>
+            <label class="range-label">
+              <span>Temperature ≤ <strong id="cold-val">0</strong> °<span class="unit-label2">C</span></span>
+              <input type="range" id="cold-threshold" min="-30" max="15" step="1" value="0" />
+            </label>
+            <label class="range-label">
+              <span>Temperature ≥ <strong id="hot-val">40</strong> °<span class="unit-label2">C</span></span>
+              <input type="range" id="hot-threshold" min="30" max="55" step="1" value="40" />
+            </label>
+          </fieldset>
+
+          <!-- Schedule -->
+          <fieldset class="config-group">
+            <legend>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Schedule
+            </legend>
+            <label>
+              <span>Auto-check every</span>
+              <select id="check-interval">
+                <option value="0">Off (manual only)</option>
+                <option value="30">30 minutes</option>
+                <option value="60" selected>1 hour</option>
+                <option value="180">3 hours</option>
+                <option value="360">6 hours</option>
+              </select>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="alert-rain" checked />
+              <span>Alert on rain / snow</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="alert-wind" checked />
+              <span>Alert on high winds</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="alert-cold" />
+              <span>Alert on freezing temps</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="alert-hot" />
+              <span>Alert on extreme heat</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="alert-severe" checked />
+              <span>Alert on severe weather (storms, fog, etc.)</span>
+            </label>
+          </fieldset>
+        </div>
+
+        <div class="config-actions">
+          <button class="btn-primary" id="btn-save">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Save Settings
+          </button>
+          <button class="btn-secondary" id="btn-test">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+            Send Test Alert
+          </button>
+          <button class="btn-secondary" id="btn-check">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.41-5.06"/></svg>
+            Check Now
+          </button>
+          <span id="save-status" class="status-inline" aria-live="polite"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Status Bar ──────────────────────────────────────────── -->
+    <div class="status-bar" id="status-bar" style="display:none">
+      <div class="status-left">
+        <span class="status-dot" id="status-dot"></span>
+        <span id="status-text"></span>
+      </div>
+      <span id="countdown-text" class="countdown-text"></span>
+    </div>
+
+    <!-- ── Current Weather ────────────────────────────────────── -->
+    <section id="weather-section" style="display:none" aria-label="Current weather">
+      <div class="weather-grid">
+        <!-- Current conditions card -->
+        <div class="card current-card">
+          <div class="current-top">
+            <div>
+              <div class="current-city" id="cur-city"></div>
+              <div class="current-desc" id="cur-desc"></div>
+            </div>
+            <img id="cur-icon" class="weather-icon-lg" src="" alt="" />
+          </div>
+          <div class="current-temp" id="cur-temp"></div>
+          <div class="current-details">
+            <div class="detail-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/></svg>
+              <span>Feels like <strong id="cur-feels"></strong></span>
+            </div>
+            <div class="detail-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v6m0 0a4 4 0 1 0 4 4H8a4 4 0 0 0 4-4z"/></svg>
+              <span>Humidity <strong id="cur-hum"></strong></span>
+            </div>
+            <div class="detail-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>
+              <span>Wind <strong id="cur-wind"></strong></span>
+            </div>
+            <div class="detail-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              <span>Pressure <strong id="cur-pressure"></strong></span>
+            </div>
+            <div class="detail-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+              <span>Visibility <strong id="cur-vis"></strong></span>
+            </div>
+            <div class="detail-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span>Updated <strong id="cur-time"></strong></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active alerts -->
+        <div class="card alerts-card" id="active-alerts-card" style="display:none">
+          <h3 class="card-title alert-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Active Alerts
+          </h3>
+          <div id="active-alerts-list"></div>
+        </div>
+      </div>
+
+      <!-- 5-day forecast -->
+      <div class="card forecast-card">
+        <h3 class="card-title">5-Day Forecast</h3>
+        <div id="forecast-list" class="forecast-row"></div>
+      </div>
+    </section>
+
+    <!-- ── Alert Log ──────────────────────────────────────────── -->
+    <section class="card log-card" id="log-section" style="display:none" aria-label="Alert history">
+      <div class="card-header">
+        <h3 class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Alert Log
+        </h3>
+        <button class="btn-ghost" id="btn-clear-log">Clear</button>
+      </div>
+      <ul id="log-list" class="log-list"></ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>Powered by <a href="https://openweathermap.org" target="_blank" rel="noopener">OpenWeatherMap</a> &amp; <a href="https://core.telegram.org/bots/api" target="_blank" rel="noopener">Telegram Bot API</a> &mdash; all keys stored locally in your browser &mdash; <a href="https://github.com/elesiaann/weather-alert-bot" target="_blank" rel="noopener">GitHub</a></p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
