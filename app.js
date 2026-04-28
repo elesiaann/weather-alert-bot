@@ -624,10 +624,6 @@ function boot() {
     localStorage.setItem(KEYS.dark, isDark ? '0' : '1');
   });
 
-  /* Pre-fill Telegram credentials if not already saved */
-  if (!$('tg-token').value) $('tg-token').value = '8798851349:AAGzPlN9ziy27LYXd-Vg1ZNOCMHxD8Gh_Hs';
-  if (!$('tg-chat').value)  $('tg-chat').value  = '8451647969';
-
   /* Auto-start if settings already saved */
   if ($('owm-key').value && ($('city-input').value || (state.lat && state.lon))) {
     runCheck(false).then(startAutoCheck);
